@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="reset.css">
+        <link rel="stylesheet" href="style.css">
+        <title>Encriptador de texto </title>
+    </head>
+    <body>
+        <button id="modo">&#9788;</button>
+        <header>
+                        <img src="images/logoAlura.png" alt="Logo Alura">
+        </header>
+        <main>
+            <fieldset id="campoEntrada">
+                <textarea id="texto" cols="10" rows="10" placeholder="Ingrese el texto aqui" autofocus></textarea>
+                <p> Solo letras minúsculas y sin acentos</p>
+                <button id="encriptar">Encriptar</button>
+                <button id="desencriptar">Desencriptar</button>    
+            </fieldset>
+            <fieldset id="salidaTexto">
+                <div id="textoVacio">
+                    <img src="images/munheco.png" alt="Imagen de falta de texto">
+                    <p>Ningún mensaje fue encontrado</p>
+                    <p>Ingresa el texto que desees encriptar o desencriptar</p>
+                </div>
+                <button id="copiar">Copiar</button>
+            </fieldset>
+        </main>
+        <footer>
+            <a href="https://www.linkedin.com/in/juan-carlos-avendaño-valenzuela-812557246/" target="_blank"><img src="images/linkedinIcon.png" alt="Linkedin"></a>
+            <a href="https://github.com/javenv329" target="_blank"><img src="images/githubIcon.png" alt="Github"></a>
+            <a href="https://twitter.com/javenv" target="_blank"><img src="images/twitter.png" alt="Twitter"></a>
+            <a href="https://web.facebook.com/juankavendano329" target="_blank"><img src="images/facebook.png" alt="Twitter"></a> 
+            <a href="https://www.tiktok.com/@juank329" target="_blank"><img src="images/tiktok.png" alt="Twitter"></a>
+
+
+            <p>By Juan Avendaño</p>
+        </footer>
+
+        <script>
+            function encriptar(texto) {
+                var vector = volverVector(texto);
+                for(var i = 0; i < vector.length; i++){                    
+                    if(vector[i] == "a"){
+                            vector[i] = "ai";
+                        }else{
+                            if(vector[i] == "e"){
+                                vector[i] = "enter";
+                            }else{
+                                if(vector[i] == "i"){
+                                    vector[i] = "imes";
+                                }else{
+                                    if(vector[i] == "o"){
+                                        vector[i] = "ober";
+                                    }else{
+                                        if(vector[i] == "u"){
+                                            vector[i] = "ufat";
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                }
+                texto = volverTexto(vector);
+                return texto;                
+            }
+
+            function desencriptar(texto) {
+                var vector = volverVector(texto);
+                var vectorDesencriptado = [];
+                var indice = 0;
+                for(var i = 0; i<vector.length;i++){
+                    if(vector[i] == "a" && vector[i+1] == "i"){
+                        vectorDesencriptado[indice] = "a";
+                        i++;
+                        indice++;
+                    }else{
+                        if(vector[i] == "e" && vector[i+1] == "n" && vector[i+2] == "t" && vector[i+3] == "e" && vector[i+4] == "r"){
+                            vectorDesencriptado[indice] = "e";
+                            i+=4;
+                            indice++;
+                        }else{
+                            if (vector[i] == "i" && vector[i+1] == "m" && vector[i+2] == "e" && vector[i+3] == "s") {
+                                vectorDesencriptado[indice] = "i";
+                                i+=3;
+                                indice++;
+                            }else{
+                                if (vector[i] == "o" && vector[i+1] == "b" && vector[i+2] == "e" && vector[i+3] == "r") {
+                                    vectorDesencriptado[indice] = "o";
+                                    i+=3;
+                                    indice++;
+                                }else{
+                                    if (vector[i] == "u" && vector[i+1] == "f" && vector[i+2] == "a" && vector[i+3] == "t") {
+                                        vectorDesencriptado[indice] = "u";
+                                        i+=3;
+                                        indice++;
+                                    }else{
+                                        vectorDesencriptado[indice] = vector[i];
+                                        indice++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                texto = volverTexto(vectorDesencriptado);
+                return texto;  
+            }
+
+            function controlLetras(texto){
+                var vector = volverVector(texto);
+                for(var i=0;i<vector.length;i++){
+                    if(!(vector[i].charCodeAt()<123 && vector[i].charCodeAt()>96 || vector[i].charCodeAt()==32)){
+                        return false;
+                    }
+                }
+                return true;
+            }
+            
+            function volverTexto(vector) {
+                var texto = vector.toString();
+                return texto.replace(/,/g,"");                
+            }
+            
+            function volverVector(texto) {
+                var vector = texto.split('');
+                return vector;
+            }
+            
+            function encriptacion() {
+                var textoEntrada = document.getElementById("texto").value;
+                var textoSalida = document.getElementById("textoVacio");
+                var btnCopiar = document.getElementById("copiar");
+                if(controlLetras(textoEntrada) && textoEntrada != ""){
+                    var textoEncriptado = encriptar(textoEntrada);
+                    textoSalida.innerHTML= textoEncriptado;
+                    btnCopiar.style.display = "block";
+                    btnCopiar.style.visibility = "visible";
+
+                }else{
+                    if(textoEntrada == ""){
+                        alert("Escriba algo en el campo 'Ingrese el texto aqui'");
+                    }else{
+                        alert("Solo letras minúsculas y sin acentos");
+                    }
+                }
+            }
+
+            function desencriptacion() {
+                var textoEntrada = document.getElementById("texto").value;
+                var textoSalida = document.getElementById("textoVacio");
+                var btnCopiar = document.getElementById("copiar");
+                if(controlLetras(textoEntrada) && textoEntrada != ""){
+                    var textoEncriptado = desencriptar(textoEntrada);
+                    textoSalida.innerHTML= textoEncriptado;
+                    btnCopiar.style.display = "block";
+                    btnCopiar.style.visibility = "visible";
+
+                }else{
+                    if(textoEntrada == ""){
+                        alert("Escriba algo en el campo 'Ingrese el texto aqui'");
+                    }else{
+                        alert("Solo letras minúsculas y sin acentos");
+                    }
+                }
+            }
+            
+            function copiar() {
+                var texto = document.getElementById("textoVacio").innerHTML;
+                navigator.clipboard.writeText(texto);
+            }
+            
+            function cambiarModo() {
+                modo = !modo;
+                if(modo){
+                    claro();
+                }else{
+                    oscuro();
+                }
+            }
+            function claro(){
+                btnModo.innerHTML = "&#9788;";
+                btnModo.style.background = "white";
+                btnModo.style.color = "#0A3871";
+                
+                document.querySelector("body").style.background = "#F3F5FC";
+                document.getElementById("salidaTexto").style.background = "white";
+                document.getElementById("salidaTexto").style.color = "black";
+                document.getElementById("textoVacio").style.color = "black";
+                var parrafo = document.getElementById("textoVacio").childNodes;
+                if (parrafo.length>3) {
+                    parrafo[3].style.color = "#343A40";
+                    parrafo[5].style.color = "#495057";
+                }
+            }
+            function oscuro() {
+                btnModo.innerHTML = "&#9790;";
+                btnModo.style.background = "#0A3871";
+                btnModo.style.color = "#D8DFE8";
+
+                document.querySelector("body").style.background = "#282b30";
+                document.getElementById("salidaTexto").style.background = "#424549";
+                document.getElementById("salidaTexto").style.color = "#D8DFE8";
+                document.getElementById("textoVacio").style.color = "#D8DFE8";
+                var parrafo = document.getElementById("textoVacio").childNodes;
+                if (parrafo.length>3) {
+                    parrafo[3].style.color = "white";
+                    parrafo[5].style.color = "rgba(255,255,255,0.5)";
+                }
+            }
+            var btnEncriptar = document.getElementById("encriptar");
+            var btnDesencriptar = document.getElementById("desencriptar");
+            var btnCopiar = document.getElementById("copiar");
+            var btnModo = document.getElementById("modo");
+            var modo = true;
+
+            btnEncriptar.onclick = encriptacion;
+            btnDesencriptar.onclick = desencriptacion;
+            btnCopiar.onclick = copiar;
+            btnModo.onclick = cambiarModo;
+
+        </script>
+    </body>
+</html>
